@@ -22,7 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 
-public class ListFrag extends Fragment {
+public class TasksListFrag extends Fragment {
 
     public static final int MENU_ITEM_EDIT = Menu.FIRST;
     public static final int MENU_ITEM_COPY = Menu.FIRST + 1;
@@ -41,6 +41,8 @@ public class ListFrag extends Fragment {
         View myview = inflater.inflate(R.layout.list_frag, container, false);
 
         myact = (MainActivity) getActivity();
+        String fragTitle = getArguments().getString("fragTitle");
+        myact.getSupportActionBar().setTitle(fragTitle);
         cntx = myact.getApplicationContext();
 
         myList = (ListView) myview.findViewById(R.id.mylist);

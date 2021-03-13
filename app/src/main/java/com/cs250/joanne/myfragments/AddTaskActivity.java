@@ -4,26 +4,33 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class AddTaskActivity extends AppCompatActivity {
 
-    private Integer totalNumTasks;
+//    private Integer totalNumTasks;
     private SharedPreferences myPrefs;
     private DatePickerDialog dPicker;
 
@@ -63,6 +70,7 @@ public class AddTaskActivity extends AppCompatActivity {
      * Function that will be called when the SAVE button is clicked.
      * @param view the current view
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void saveButton(View view) {
         // Retrieve the user-inputted values
         EditText eName = (EditText) findViewById(R.id.name_input);
@@ -80,8 +88,8 @@ public class AddTaskActivity extends AppCompatActivity {
         // Create the ArrayList that holds all the tasks currently in the application
         ArrayList<Task> tasks;
 
-        totalNumTasks = myPrefs.getInt("totalNumTasks", 0);
-        totalNumTasks++;
+//        totalNumTasks = myPrefs.getInt("totalNumTasks", 0);
+//        totalNumTasks++;
 
 
         // Retrieve the json of the ArrayList of tasks from the shared preferences and then add it to the ArrayList
@@ -96,7 +104,7 @@ public class AddTaskActivity extends AppCompatActivity {
         gson = new Gson();
         json = gson.toJson(tasks);
         peditor.putString("tasks", json);
-        peditor.putInt("totalNumTasks", 0);
+//        peditor.putInt("totalNumTasks", 0);
         peditor.apply();
 
         // Return back to the tasks page
@@ -123,21 +131,21 @@ public class AddTaskActivity extends AppCompatActivity {
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        totalNumTasks = (savedInstanceState != null) ? savedInstanceState.getInt("totalNumTasks") : 0;
+//        totalNumTasks = (savedInstanceState != null) ? savedInstanceState.getInt("totalNumTasks") : 0;
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle myBundle) {
-        myBundle.putInt("totalNumTasks", totalNumTasks);
+//        myBundle.putInt("totalNumTasks", totalNumTasks);
         super.onSaveInstanceState(myBundle);
     }
 
     @Override
     public void onPause() {
-        SharedPreferences.Editor peditor = myPrefs.edit();
-        peditor.putInt("totalNumTasks", totalNumTasks);
-        peditor.apply();
+//        SharedPreferences.Editor peditor = myPrefs.edit();
+//        peditor.putInt("totalNumTasks", totalNumTasks);
+//        peditor.apply();
         super.onPause();
     }
 
@@ -148,9 +156,9 @@ public class AddTaskActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        SharedPreferences.Editor peditor = myPrefs.edit();
-        peditor.putInt("totalNumTasks", totalNumTasks);
-        peditor.apply();
+//        SharedPreferences.Editor peditor = myPrefs.edit();
+//        peditor.putInt("totalNumTasks", totalNumTasks);
+//        peditor.apply();
         super.onDestroy();
     }
 }

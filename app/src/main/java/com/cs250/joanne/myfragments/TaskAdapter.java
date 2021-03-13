@@ -16,10 +16,12 @@ import java.util.List;
 public class TaskAdapter extends ArrayAdapter<Task> {
 
     int resource;
+    String type;
 
-    public TaskAdapter(Context ctx, int res, List<Task> tasks) {
+    public TaskAdapter(Context ctx, int res, List<Task> tasks, String type) {
         super(ctx, res, tasks);
         resource = res;
+        type = type;
     }
 
     @Override
@@ -39,8 +41,12 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         TextView taskName = (TextView) itemView.findViewById(R.id.task_title);
         taskName.setText(task.getName());
 
-        TextView taskDueDate = (TextView) itemView.findViewById(R.id.task_due_date);
-        taskDueDate.setText(task.getDueDate());
+        TextView taskDate = (TextView) itemView.findViewById(R.id.task_date);
+        if (type.equals("todo")) {
+            taskDate.setText(task.getDueDate());
+        } else if (type.equals("completed")) {
+            taskDate.setText(task.getCompletedDate());
+        }
 
         TextView taskCategory = (TextView) itemView.findViewById(R.id.task_category);
         taskCategory.setText(task.getCategory());
