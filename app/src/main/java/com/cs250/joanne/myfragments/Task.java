@@ -4,14 +4,21 @@ import java.time.LocalDate;
 
 public class Task {
     private String name;
+    private final int id;
+    private static int curId = 0;
     private String dueDate;
     private String completedDate;
     private String category;
 
     public Task(String title, String dueDate, String category) {
+        this.id = curId++;
         this.name = title;
         this.dueDate = dueDate;
         this.category = category;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

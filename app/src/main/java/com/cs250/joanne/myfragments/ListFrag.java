@@ -24,8 +24,9 @@ import java.util.ArrayList;
 
 public class ListFrag extends Fragment {
 
-    public static final int MENU_ITEM_EDITVIEW = Menu.FIRST;
-    public static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
+    public static final int MENU_ITEM_EDIT = Menu.FIRST;
+    public static final int MENU_ITEM_COPY = Menu.FIRST + 1;
+    public static final int MENU_ITEM_DELETE = Menu.FIRST + 2;
 
     private ListView myList;
     private MainActivity myact;
@@ -39,9 +40,9 @@ public class ListFrag extends Fragment {
         // Inflate the layout for this fragment
         View myview = inflater.inflate(R.layout.list_frag, container, false);
 
-        cntx = getActivity().getApplicationContext();
-
         myact = (MainActivity) getActivity();
+        cntx = myact.getApplicationContext();
+
         myList = (ListView) myview.findViewById(R.id.mylist);
         // connect listview to the array adapter in MainActivity
         myList.setAdapter(myact.aa);
@@ -69,7 +70,8 @@ public class ListFrag extends Fragment {
         menu.setHeaderTitle("Select Item");
 
         // Add menu items
-        menu.add(0, MENU_ITEM_EDITVIEW, 0, R.string.menu_editview);
+        menu.add(0, MENU_ITEM_EDIT, 0, R.string.menu_editview);
+        menu.add(0, MENU_ITEM_COPY, 0, R.string.menu_copy);
         menu.add(0, MENU_ITEM_DELETE, 0, R.string.menu_delete);
     }
 
@@ -82,9 +84,14 @@ public class ListFrag extends Fragment {
         int index = menuInfo.position; // position in array adapter
 
         switch (item.getItemId()) {
-            case MENU_ITEM_EDITVIEW: {
+            case MENU_ITEM_EDIT: {
 
                 Toast.makeText(cntx, "edit request",
+                        Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            case MENU_ITEM_COPY: {
+                Toast.makeText(cntx, "copy request",
                         Toast.LENGTH_SHORT).show();
                 return false;
             }

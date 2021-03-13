@@ -17,8 +17,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
     int resource;
 
-    public TaskAdapter(Context ctx, int res, List<Task> tasks)
-    {
+    public TaskAdapter(Context ctx, int res, List<Task> tasks) {
         super(ctx, res, tasks);
         resource = res;
     }
@@ -37,10 +36,14 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             itemView = (LinearLayout) convertView;
         }
 
-        TextView whatView = (TextView) itemView.findViewById(R.id.detail);
+        TextView taskName = (TextView) itemView.findViewById(R.id.task_title);
+        taskName.setText(task.getName());
 
-        whatView.setText(task.getName());
+        TextView taskDueDate = (TextView) itemView.findViewById(R.id.task_due_date);
+        taskDueDate.setText(task.getDueDate());
 
+        TextView taskCategory = (TextView) itemView.findViewById(R.id.task_category);
+        taskCategory.setText(task.getCategory());
 
         return itemView;
     }

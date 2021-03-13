@@ -27,7 +27,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Fragment item;
     private Fragment list;
     private FragmentTransaction transaction;
     private SharedPreferences myPrefs;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         // create ArrayList of items
         tasks = new ArrayList<Task>();
         // make array adapter to bind arraylist to listview with custom item layout
-        aa = new TaskAdapter(this, R.layout.item_layout, tasks);
+        aa = new TaskAdapter(this, R.layout.task_layout, tasks);
 
         // Get the current values of the total number of tasks and the ArrayList of tasks
         myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -64,11 +63,10 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        item = new ItemFrag();
         list = new ListFrag();
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, item).commit();
+                .add(R.id.fragment_container, list).commit();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -105,7 +103,6 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (item.getItemId() == R.id.action_add) {
@@ -128,7 +125,7 @@ public class MainActivity extends AppCompatActivity
 
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
-            transaction.replace(R.id.fragment_container, this.item);
+            transaction.replace(R.id.fragment_container, this.list);
             transaction.addToBackStack(null);
 
             // Commit the transaction
