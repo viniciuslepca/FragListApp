@@ -21,7 +21,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     public TaskAdapter(Context ctx, int res, List<Task> tasks, String type) {
         super(ctx, res, tasks);
         resource = res;
-        type = type;
+        this.type = type;
     }
 
     @Override
