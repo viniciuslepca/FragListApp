@@ -103,6 +103,36 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+        // Get the current values of the total number of tasks and the ArrayList of tasks
+        todo = new ArrayList<>();
+        completed = new ArrayList<>();
+        Context context = getApplicationContext();
+        myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+//        totalNumTasks = myPrefs.getInt("totalNumTasks", 0);
+        gson = new Gson();
+        String json = myPrefs.getString("tasks", null);
+        Type type = new TypeToken<List<Task>>(){}.getType();
+        if (json == null) {
+            tasks = new ArrayList<>();
+        } else {
+            tasks = gson.fromJson(json, type);
+            for (Task t : tasks) {
+                if (t.getCompletedDate() == null) {
+                    todo.add(t);
+                } else {
+                    completed.add(t);
+                }
+            }
+        }
+        Bundle bundleCurrent = new Bundle();
+        bundleCurrent.putString("fragTitle", "Current Tasks");
+        currentTasksFrag = new TasksListFrag();
+        currentTasksFrag.setArguments(bundleCurrent);
+
+        Bundle bundleCompleted = new Bundle();
+        bundleCompleted.putString("fragTitle", "Completed Tasks");
+        completedTasksFrag = new TasksListFrag();
+        completedTasksFrag.setArguments(bundleCompleted);
     }
 
     @Override

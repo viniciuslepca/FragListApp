@@ -3,9 +3,16 @@ package com.cs250.joanne.myfragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -18,6 +25,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -35,13 +43,13 @@ public class TasksListFrag extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View myview = inflater.inflate(R.layout.list_frag, container, false);
 
         myact = (MainActivity) getActivity();
-        String fragTitle = getArguments().getString("fragTitle");
+        final String fragTitle = getArguments().getString("fragTitle");
         myact.getSupportActionBar().setTitle(fragTitle);
         cntx = myact.getApplicationContext();
 
@@ -55,8 +63,45 @@ public class TasksListFrag extends Fragment {
         // program a short click on the list item
         myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Snackbar.make(view, "Selected #" + id, Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
+                if (fragTitle.equals("Current Tasks")) {
+                    DialogFragment dFrag = new MarkListCompletedFrag();
+
+                    Bundle bundle = new Bundle();
+
+                    int index = (int) id;
+
+                    String dueDate = myact.tasks.get(index).getDueDate();
+                    String category = myact.tasks.get(index).getCategory();
+                    String name = myact.tasks.get(index).getName();
+
+                    bundle.putString("name", name);
+                    bundle.putString("dueDate", dueDate);
+                    bundle.putString("category", category);
+                    bundle.putInt("position", (int) id);
+
+                    dFrag.setArguments(bundle);
+                    dFrag.show(getChildFragmentManager(), "current_complete");
+                } else if (fragTitle.equals("Completed Tasks")) {
+                    // Implement for Completed Tasks
+                    DialogFragment dFrag = new ViewCompletedTaskFrag();
+
+                    Bundle bundle = new Bundle();
+
+                    int index = (int) id;
+
+                    String dueDate = myact.tasks.get(index).getDueDate();
+                    String doneDate = myact.tasks.get(index).getCompletedDate();
+                    String category = myact.tasks.get(index).getCategory();
+                    String name = myact.tasks.get(index).getName();
+
+                    bundle.putString("name", name);com
+                    bundle.putString("dueDate", dueDate);
+                    bundle.putString("doneDate", doneDate);
+                    bundle.putString("category", category);
+
+                    dFrag.setArguments(bundle);
+                    dFrag.show(getChildFragmentManager(), "completed_view");
+                }
             }
         });
 
@@ -87,28 +132,64 @@ public class TasksListFrag extends Fragment {
 
         switch (item.getItemId()) {
             case MENU_ITEM_EDIT: {
-
+                Intent intent = new Intent(getActivity(), AddTaskActivity.class);
+                intent.putExtra("Edit", 1);
+                intent.putExtra("id", myact.tasks.get(index).getId());
+                startActivity(intent);
                 Toast.makeText(cntx, "edit request",
                         Toast.LENGTH_SHORT).show();
                 return false;
             }
             case MENU_ITEM_COPY: {
-                Toast.makeText(cntx, "copy request",
+                // Get the task to be copied
+                Task toCopy = myact.tasks.get(index);
+
+                // Copy the fields of the task to be copied
+                String title = toCopy.getName() + " (copy)";
+                String dueDate = toCopy.getDueDate();
+                String doneDate = toCopy.getCompletedDate();
+                String category = toCopy.getCategory();
+
+                // Create the copied task
+                Task copyTask = new Task(title, dueDate, category);
+                copyTask.setCompletedDate(doneDate);
+
+                // Add the copied task to the ArrayList of tasks
+                myact.tasks.add(copyTask);
+                Context context = myact.getApplicationContext();
+                SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                ArrayList<Task> updatedTasks = myact.tasks;
+                SharedPreferences.Editor peditor = myPrefs.edit();
+                Gson gson = new Gson();
+                String json = gson.toJson(updatedTasks);
+                peditor.putString("tasks", json);
+                peditor.apply();
+
+                Toast.makeText(cntx, "Copy Successfully Made!",
                         Toast.LENGTH_SHORT).show();
+                myact.aa.notifyDataSetChanged();
                 return false;
             }
             case MENU_ITEM_DELETE: {
                 myact.tasks.remove(index);
-                Toast.makeText(cntx, "job " + index + " deleted",
+                Context context = myact.getApplicationContext();
+                SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                ArrayList<Task> updatedTasks = myact.tasks;
+                SharedPreferences.Editor peditor = myPrefs.edit();
+                Gson gson = new Gson();
+                String json = gson.toJson(updatedTasks);
+                peditor.putString("tasks", json);
+                peditor.apply();
+                Toast.makeText(cntx, "Task " + index + " successfully deleted!",
                         Toast.LENGTH_SHORT).show();
                 // refresh view
+//                getFragmentManager().beginTransaction().dietach(this).attach(this).commit();
                 myact.aa.notifyDataSetChanged();
                 return true;
             }
         }
         return false;
     }
-
 
     // Called at the start of the visible lifetime.
     @Override

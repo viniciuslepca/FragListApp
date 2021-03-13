@@ -7,7 +7,7 @@
     tools:context=".AddTaskActivity">
 
     <TextView
-        android:id="@+id/name_title"
+        android:id="@+id/what_to_do"
         android:layout_width="75dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"

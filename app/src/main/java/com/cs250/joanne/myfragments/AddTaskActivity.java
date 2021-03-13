@@ -33,11 +33,17 @@ public class AddTaskActivity extends AppCompatActivity {
 //    private Integer totalNumTasks;
     private SharedPreferences myPrefs;
     private DatePickerDialog dPicker;
+    private int edit;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+
+        Intent intent = getIntent();
+        edit = intent.getIntExtra("Edit", 0);
+        id = intent.getIntExtra("id", -1);
 
         Context context = getApplicationContext();
         myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -82,30 +88,59 @@ public class AddTaskActivity extends AppCompatActivity {
         String dueDate = eDueDate.getText().toString();
         String category = eCategory.getText().toString();
 
-        // Create the new task from the user-input
-        Task newTask = new Task(name, dueDate, category);
+        if (edit == 0) {
+            // Create the new task from the user-input
+            Task newTask = new Task(name, dueDate, category);
 
-        // Create the ArrayList that holds all the tasks currently in the application
-        ArrayList<Task> tasks;
+            // Create the ArrayList that holds all the tasks currently in the application
+            ArrayList<Task> tasks = new ArrayList<>();
 
 //        totalNumTasks = myPrefs.getInt("totalNumTasks", 0);
 //        totalNumTasks++;
 
 
-        // Retrieve the json of the ArrayList of tasks from the shared preferences and then add it to the ArrayList
-        Gson gson = new Gson();
-        String json = myPrefs.getString("tasks", "");
-        Type type = new TypeToken<List<Task>>(){}.getType();
-        tasks = gson.fromJson(json, type);
-        tasks.add(newTask);
+            // Retrieve the json of the ArrayList of tasks from the shared preferences and then add it to the ArrayList
+            Gson gson = new Gson();
+            String json = myPrefs.getString("tasks", null);
+            Type type = new TypeToken<List<Task>>() {
+            }.getType();
+            if (json != null) {
+                tasks = gson.fromJson(json, type);
+            }
+            tasks.add(newTask);
 
-        // Store the updated ArrayList back into the editor
-        SharedPreferences.Editor peditor = myPrefs.edit();
-        gson = new Gson();
-        json = gson.toJson(tasks);
-        peditor.putString("tasks", json);
+            // Store the updated ArrayList back into the editor
+            SharedPreferences.Editor peditor = myPrefs.edit();
+            gson = new Gson();
+            json = gson.toJson(tasks);
+            peditor.putString("tasks", json);
 //        peditor.putInt("totalNumTasks", 0);
-        peditor.apply();
+            peditor.apply();
+        } else {
+            ArrayList<Task> tasks = new ArrayList<>();
+            Gson gson = new Gson();
+            String json = myPrefs.getString("tasks", null);
+            Type type = new TypeToken<List<Task>>(){}.getType();
+            Task toUpdate = null;
+            if (json != null) {
+                tasks = gson.fromJson(json, type);
+                for (Task t : tasks) {
+                    if (t.getId() == id) {
+                        toUpdate = t;
+                    }
+                }
+            }
+            if (toUpdate != null) {
+                toUpdate.setName(name);
+                toUpdate.setDueDate(dueDate);
+                toUpdate.setCategory(category);
+            }
+            gson = new Gson();
+            json = gson.toJson(tasks);
+            SharedPreferences.Editor peditor = myPrefs.edit();
+            peditor.putString("tasks", json);
+            peditor.apply();
+        }
 
         // Return back to the tasks page
         Intent intent = new Intent(this, MainActivity.class);

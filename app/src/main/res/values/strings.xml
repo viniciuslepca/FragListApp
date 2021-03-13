@@ -24,4 +24,10 @@
     <string name="to_do">To Do</string>
     <string name="done">Done</string>
     <string name="stats">Stats</string>
+    <string name="mark_completed">MARK COMPLETED</string>
+    <string name="what_to_do">What to do</string>
+    <string name="pop_up_due_date">DUE:</string>
+    <string name="mark_completed_button">MARK COMPLETED</string>
+    <string name="what_was_done">What was done</string>
+    <string name="pop_up_done_date">DONE:</string>
 </resources>

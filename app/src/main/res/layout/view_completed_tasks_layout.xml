@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FDFFFFFF"
+    tools:context=".AddTaskActivity">
+
+    <TextView
+        android:id="@+id/what_to_do"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/what_was_done"
+        android:textSize="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/pop_up_due_title_done"
+        android:layout_width="65dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="32dp"
+        android:text="@string/pop_up_due_date"
+        android:textSize="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/what_to_do" />
+
+    <TextView
+        android:id="@+id/pop_up_done_title"
+        android:layout_width="86dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="32dp"
+        android:text="@string/pop_up_done_date"
+        android:textSize="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pop_up_due_title_done" />
+
+    <TextView
+        android:id="@+id/pop_up_category_title_done"
+        android:layout_width="112dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:text="Category:"
+        android:textSize="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pop_up_done_title" />
+
+    <TextView
+        android:id="@+id/pop_up_due_date_done"
+        android:layout_width="189dp"
+        android:layout_height="42dp"
+        android:textSize="25dp"
+        app:layout_constraintStart_toEndOf="@+id/pop_up_due_title_done"
+        app:layout_constraintTop_toBottomOf="@+id/what_to_do" />
+
+    <TextView
+        android:id="@+id/pop_up_done_date"
+        android:layout_width="189dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="4dp"
+        android:textSize="25dp"
+        app:layout_constraintStart_toEndOf="@+id/pop_up_done_title"
+        app:layout_constraintTop_toBottomOf="@+id/pop_up_due_date_done" />
+
+    <TextView
+        android:id="@+id/pop_up_category_done"
+        android:layout_width="210dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="32dp"
+        android:text="No Category Set"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/pop_up_category_title_done"
+        app:layout_constraintTop_toBottomOf="@+id/pop_up_done_date" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
