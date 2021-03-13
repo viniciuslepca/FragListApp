@@ -13,20 +13,20 @@ import java.util.List;
 /**
  * Created by joanne.
  */
-public class ItemAdapter extends ArrayAdapter<Item> {
+public class TaskAdapter extends ArrayAdapter<Task> {
 
     int resource;
 
-    public ItemAdapter(Context ctx, int res, List<Item> items)
+    public TaskAdapter(Context ctx, int res, List<Task> tasks)
     {
-        super(ctx, res, items);
+        super(ctx, res, tasks);
         resource = res;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout itemView;
-        Item it = getItem(position);
+        Task task = getItem(position);
 
         if (convertView == null) {
             itemView = new LinearLayout(getContext());
@@ -39,7 +39,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
 
         TextView whatView = (TextView) itemView.findViewById(R.id.detail);
 
-        whatView.setText(it.getWhat());
+        whatView.setText(task.getName());
 
 
         return itemView;

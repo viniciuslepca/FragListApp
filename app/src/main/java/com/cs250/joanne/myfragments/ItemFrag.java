@@ -26,18 +26,18 @@ public class ItemFrag extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.item_frag, container, false);
 
-        myact = (MainActivity) getActivity();
-
-        tv = (EditText) view.findViewById(R.id.item_text);
-        btn = (Button) view.findViewById(R.id.add_btn);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Item myitem = new Item(tv.getText().toString());
-                myact.myItems.add(myitem);
-                Toast.makeText(getActivity().getApplicationContext(), "added item", LENGTH_SHORT).show();
-            }
-        });
+//        myact = (MainActivity) getActivity();
+//
+//        tv = (EditText) view.findViewById(R.id.item_text);
+//        btn = (Button) view.findViewById(R.id.add_btn);
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Item myitem = new Item(tv.getText().toString());
+//                myact.myItems.add(myitem);
+//                Toast.makeText(getActivity().getApplicationContext(), "added item", LENGTH_SHORT).show();
+//            }
+//        });
 
         return view;
     }

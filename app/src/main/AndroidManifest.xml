@@ -20,6 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".AddTaskActivity"
+            android:label="@string/task_update"></activity>
     </application>
 
 </manifest>

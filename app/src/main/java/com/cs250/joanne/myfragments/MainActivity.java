@@ -1,18 +1,28 @@
 package com.cs250.joanne.myfragments;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -20,8 +30,11 @@ public class MainActivity extends AppCompatActivity
     private Fragment item;
     private Fragment list;
     private FragmentTransaction transaction;
-    protected ItemAdapter aa;
-    protected ArrayList<Item> myItems;
+    private SharedPreferences myPrefs;
+    protected Integer totalNumTasks;
+    protected TaskAdapter aa;
+    protected ArrayList<Task> tasks;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +43,20 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Context context = getApplicationContext();
+
         // create ArrayList of items
-        myItems = new ArrayList<Item>();
+        tasks = new ArrayList<Task>();
         // make array adapter to bind arraylist to listview with custom item layout
-        aa = new ItemAdapter(this, R.layout.item_layout, myItems);
+        aa = new TaskAdapter(this, R.layout.item_layout, tasks);
+
+        // Get the current values of the total number of tasks and the ArrayList of tasks
+        myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        totalNumTasks = myPrefs.getInt("totalNumTasks", 0);
+        Gson gson = new Gson();
+        String json = myPrefs.getString("tasks", "");
+        Type type = new TypeToken<List<Task>>(){}.getType();
+        tasks = gson.fromJson(json, type);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -49,6 +72,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Store the total number of tasks and also the ArrayList of tasks back into the shared preferences
+        SharedPreferences.Editor peditor = myPrefs.edit();
+        peditor.putInt("totalNumTasks", totalNumTasks);
+        // Store the arraylist back as a json
+        gson = new Gson();
+        json = gson.toJson(tasks);
+        peditor.putString("tasks", json);
+        peditor.apply();
     }
 
     @Override
@@ -76,10 +108,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_add) {
+            // Open up the create/add task intent
+            Intent intent = new Intent(this, AddTaskActivity.class);
+            startActivity(intent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -89,36 +123,42 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.item_frag) {
+        if (id == R.id.todo_frag) {
             transaction = getSupportFragmentManager().beginTransaction();
 
-// Replace whatever is in the fragment_container view with this fragment,
-// and add the transaction to the back stack so the user can navigate back
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
             transaction.replace(R.id.fragment_container, this.item);
             transaction.addToBackStack(null);
 
-// Commit the transaction
+            // Commit the transaction
             transaction.commit();
 
-        } else if (id == R.id.list_frag) {
+        } else if (id == R.id.done_frag) {
             transaction = getSupportFragmentManager().beginTransaction();
 
-// Replace whatever is in the fragment_container view with this fragment,
-// and add the transaction to the back stack so the user can navigate back
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
             transaction.replace(R.id.fragment_container, list);
             transaction.addToBackStack(null);
 
-// Commit the transaction
+            // Commit the transaction
+            transaction.commit();
+        } else if (id == R.id.stats_frag) {
+            transaction = getSupportFragmentManager().beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.replace(R.id.fragment_container, list);
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
             transaction.commit();
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
 }

@@ -32,6 +32,8 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
+        Context context = getApplicationContext();
+        myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         // Set the title of the action bar
         getSupportActionBar().setTitle("Update Task");
 
@@ -55,11 +57,6 @@ public class AddTaskActivity extends AppCompatActivity {
             dPicker.show();
             }
         });
-
-        // Get the saved values of the total number of tasks
-        Context context = getApplicationContext();
-        myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        totalNumTasks = myPrefs.getInt("totalNumTasks", 0);
     }
 
     /**
@@ -83,6 +80,10 @@ public class AddTaskActivity extends AppCompatActivity {
         // Create the ArrayList that holds all the tasks currently in the application
         ArrayList<Task> tasks;
 
+        totalNumTasks = myPrefs.getInt("totalNumTasks", 0);
+        totalNumTasks++;
+
+
         // Retrieve the json of the ArrayList of tasks from the shared preferences and then add it to the ArrayList
         Gson gson = new Gson();
         String json = myPrefs.getString("tasks", "");
@@ -95,6 +96,7 @@ public class AddTaskActivity extends AppCompatActivity {
         gson = new Gson();
         json = gson.toJson(tasks);
         peditor.putString("tasks", json);
+        peditor.putInt("totalNumTasks", 0);
         peditor.apply();
 
         // Return back to the tasks page
@@ -142,7 +144,6 @@ public class AddTaskActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        totalNumTasks = myPrefs.getInt("totalNumTasks", 0);
     }
 
     @Override

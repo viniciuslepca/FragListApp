@@ -89,7 +89,7 @@ public class ListFrag extends Fragment {
                 return false;
             }
             case MENU_ITEM_DELETE: {
-                myact.myItems.remove(index);
+                myact.tasks.remove(index);
                 Toast.makeText(cntx, "job " + index + " deleted",
                         Toast.LENGTH_SHORT).show();
                 // refresh view

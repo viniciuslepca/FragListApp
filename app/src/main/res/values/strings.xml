@@ -1,12 +1,30 @@
 <resources>
-    <string name="app_name">FragListApp</string>
+    <string name="app_name">TaskMe</string>
     <string name="add">ADD ITEM</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
-
     <string name="menu_editview">Edit</string>
     <string name="menu_delete">Delete</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_TODO">TODO</string>
+    <string name="menu_done">DONE</string>
+    <string name="menu_stats">STATISTICS</string>
+    <string name="app_title">TaskMe</string>
+    <string name="add_task_name_prompt">Enter the name of the task</string>
+    <string name="add_task_name">Name</string>
+    <string name="add_task_due">Due</string>
+    <string name="add_task_category">Category</string>
+    <string name="choose_date_hint">Choose due date</string>
+    <string name="save_button_text">SAVE</string>
+    <string name="discard_button_text">CANCEL</string>
+    <string name="category_hint">Enter the category</string>
+    <string name="add_task">Add a Task</string>
+    <string name="menu_copy">Copy</string>
+    <string name="task_update">Task Update</string>
 </resources>
