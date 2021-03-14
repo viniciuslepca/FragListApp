@@ -15,7 +15,7 @@
         android:layout_marginBottom="40dp"
         android:gravity="center"
         android:text="@string/add_task_name"
-        android:textSize="25dp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/due_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,6 +29,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="40dp"
         android:hint="@string/add_task_name_prompt"
+        android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/due_date_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,7 +43,7 @@
         android:layout_marginBottom="60dp"
         android:gravity="center"
         android:text="@string/add_task_due"
-        android:textSize="25dp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/category_title"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -53,6 +54,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="68dp"
         android:hint="@string/choose_date_hint"
+        android:inputType="date"
         app:layout_constraintBottom_toTopOf="@+id/category_input"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -64,7 +66,7 @@
         android:layout_marginBottom="292dp"
         android:gravity="center"
         android:text="@string/add_task_category"
-        android:textSize="25dp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -75,6 +77,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="292dp"
         android:hint="@string/category_hint"
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -86,8 +89,9 @@
         android:layout_marginTop="116dp"
         android:layout_marginEnd="56dp"
         android:layout_marginBottom="40dp"
-        android:backgroundTint="#E80D0D"
-        android:text="@string/discard_button_text"
+        android:background="#EF5350"
+        android:textColor="#FFFFFF"
+        android:text="@android:string/cancel"
         android:onClick="cancelButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/save_button"
@@ -101,7 +105,8 @@
         android:layout_marginTop="116dp"
         android:layout_marginEnd="52dp"
         android:layout_marginBottom="40dp"
-        android:backgroundTint="#2ACE63"
+        android:background="#4CAF50"
+        android:textColor="#FFFFFF"
         android:text="@string/save_button_text"
         android:onClick="saveButton"
         app:layout_constraintBottom_toBottomOf="parent"

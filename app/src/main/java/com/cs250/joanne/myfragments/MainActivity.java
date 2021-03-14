@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity
 
     private Fragment currentTasksFrag;
     private Fragment completedTasksFrag;
+    private Fragment statsFrag;
     private FragmentTransaction transaction;
     private SharedPreferences myPrefs;
     private Gson gson;
@@ -86,6 +87,8 @@ public class MainActivity extends AppCompatActivity
         completedTasksFrag = new TasksListFrag();
         completedTasksFrag.setArguments(bundleCompleted);
 
+        statsFrag = new StatsFrag();
+
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, currentTasksFrag).commit();
 
@@ -138,7 +141,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -172,7 +174,7 @@ public class MainActivity extends AppCompatActivity
 
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
-            transaction.replace(R.id.fragment_container, currentTasksFrag);
+            transaction.replace(R.id.fragment_container, statsFrag);
             transaction.addToBackStack(null);
 
             // Commit the transaction
