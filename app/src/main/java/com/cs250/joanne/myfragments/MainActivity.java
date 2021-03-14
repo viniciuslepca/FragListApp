@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -34,35 +36,27 @@ public class MainActivity extends AppCompatActivity
     private Fragment statsFrag;
     private FragmentTransaction transaction;
     private SharedPreferences myPrefs;
-    private Gson gson;
-//    protected Integer totalNumTasks;
+    private static final Gson gson = new Gson();
+    //    protected Integer totalNumTasks;
     protected TaskAdapter aa;
     protected ArrayList<Task> tasks;
     protected ArrayList<Task> todo;
     protected ArrayList<Task> completed;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        Context context = getApplicationContext();
-
+    public String getData() {
         // Get the current values of the total number of tasks and the ArrayList of tasks
         todo = new ArrayList<>();
         completed = new ArrayList<>();
+        Context context = getApplicationContext();
         myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 //        totalNumTasks = myPrefs.getInt("totalNumTasks", 0);
-        gson = new Gson();
         String json = myPrefs.getString("tasks", null);
-        Type type = new TypeToken<List<Task>>(){}.getType();
+        Type type = new TypeToken<List<Task>>() {
+        }.getType();
         if (json == null) {
             tasks = new ArrayList<>();
         } else {
             tasks = gson.fromJson(json, type);
-            // Can be called since Task implements Comparable<Task>
             Collections.sort(tasks);
             for (Task t : tasks) {
                 if (t.getCompletedDate() == null) {
@@ -72,6 +66,21 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
+
+        if (aa != null) aa.notifyDataSetChanged();
+
+        return json;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Get data
+        String json = this.getData();
         // make array adapter to bind arraylist to listview with custom item layout
         aa = new TaskAdapter(this, R.layout.task_layout, todo, "todo");
 
@@ -110,27 +119,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        // Get the current values of the total number of tasks and the ArrayList of tasks
-        todo = new ArrayList<>();
-        completed = new ArrayList<>();
-        Context context = getApplicationContext();
-        myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-//        totalNumTasks = myPrefs.getInt("totalNumTasks", 0);
-        gson = new Gson();
-        String json = myPrefs.getString("tasks", null);
-        Type type = new TypeToken<List<Task>>(){}.getType();
-        if (json == null) {
-            tasks = new ArrayList<>();
-        } else {
-            tasks = gson.fromJson(json, type);
-            for (Task t : tasks) {
-                if (t.getCompletedDate() == null) {
-                    todo.add(t);
-                } else {
-                    completed.add(t);
-                }
-            }
-        }
+
+        this.getData();
+
         Bundle bundleCurrent = new Bundle();
         bundleCurrent.putString("fragTitle", "Current Tasks");
         currentTasksFrag = new TasksListFrag();

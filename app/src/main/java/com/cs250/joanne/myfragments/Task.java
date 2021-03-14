@@ -95,9 +95,6 @@ public class Task implements Comparable<Task> {
     public int compareTo(Task other) {
         Date thisDueDate = this.getDueDateFormatted();
         Date otherDueDate = other.getDueDateFormatted();
-        Log.d("debugging", thisDueDate.toString());
-        Log.d("debugging", otherDueDate.toString());
-
 
         return thisDueDate.compareTo(otherDueDate);
     }

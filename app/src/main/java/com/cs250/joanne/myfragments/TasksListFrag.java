@@ -28,6 +28,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
 
 public class TasksListFrag extends Fragment {
@@ -122,6 +124,19 @@ public class TasksListFrag extends Fragment {
         menu.add(0, MENU_ITEM_DELETE, 0, R.string.menu_delete);
     }
 
+    public void updateMainActivityTasks() {
+        Context context = myact.getApplicationContext();
+        SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        ArrayList<Task> updatedTasks = myact.tasks;
+        SharedPreferences.Editor peditor = myPrefs.edit();
+        Collections.sort(updatedTasks);
+        Gson gson = new Gson();
+        String json = gson.toJson(updatedTasks);
+        peditor.putString("tasks", json);
+        peditor.apply();
+        myact.getData();
+    }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         super.onContextItemSelected(item);
@@ -134,7 +149,13 @@ public class TasksListFrag extends Fragment {
             case MENU_ITEM_EDIT: {
                 Intent intent = new Intent(getActivity(), AddTaskActivity.class);
                 intent.putExtra("Edit", 1);
-                intent.putExtra("id", myact.tasks.get(index).getId());
+                Task toEdit;
+                if (myact.aa.getType().equals("todo")) {
+                    toEdit = myact.todo.get(index);
+                } else {
+                    toEdit = myact.completed.get(index);
+                }
+                intent.putExtra("id", toEdit.getId());
                 startActivity(intent);
                 Toast.makeText(cntx, "edit request",
                         Toast.LENGTH_SHORT).show();
@@ -142,7 +163,12 @@ public class TasksListFrag extends Fragment {
             }
             case MENU_ITEM_COPY: {
                 // Get the task to be copied
-                Task toCopy = myact.tasks.get(index);
+                Task toCopy;
+                if (myact.aa.getType().equals("todo")) {
+                    toCopy = myact.todo.get(index);
+                } else {
+                    toCopy = myact.completed.get(index);
+                }
 
                 // Copy the fields of the task to be copied
                 String title = toCopy.getName() + " (copy)";
@@ -156,34 +182,30 @@ public class TasksListFrag extends Fragment {
 
                 // Add the copied task to the ArrayList of tasks
                 myact.tasks.add(copyTask);
-                Context context = myact.getApplicationContext();
-                SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                ArrayList<Task> updatedTasks = myact.tasks;
-                SharedPreferences.Editor peditor = myPrefs.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(updatedTasks);
-                peditor.putString("tasks", json);
-                peditor.apply();
+                this.updateMainActivityTasks();
 
                 Toast.makeText(cntx, "Copy Successfully Made!",
                         Toast.LENGTH_SHORT).show();
-                myact.aa.notifyDataSetChanged();
+
                 return false;
             }
             case MENU_ITEM_DELETE: {
-                myact.tasks.remove(index);
-                Context context = myact.getApplicationContext();
-                SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                ArrayList<Task> updatedTasks = myact.tasks;
-                SharedPreferences.Editor peditor = myPrefs.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(updatedTasks);
-                peditor.putString("tasks", json);
-                peditor.apply();
-                Toast.makeText(cntx, "Task " + index + " successfully deleted!",
+                Task toDelete;
+                if (myact.aa.getType().equals("todo")) {
+                    toDelete = myact.todo.get(index);
+                } else {
+                    toDelete = myact.completed.get(index);
+                }
+                // Remove task based on id
+                for (Iterator<Task> iterator = myact.tasks.iterator(); iterator.hasNext(); ) {
+                    if (iterator.next().getId() == toDelete.getId())
+                        iterator.remove();
+                }
+                this.updateMainActivityTasks();
+
+                Toast.makeText(cntx, "Task successfully deleted!",
                         Toast.LENGTH_SHORT).show();
-                // refresh view
-//                getFragmentManager().beginTransaction().dietach(this).attach(this).commit();
+
                 myact.aa.notifyDataSetChanged();
                 return true;
             }
@@ -193,25 +215,25 @@ public class TasksListFrag extends Fragment {
 
     // Called at the start of the visible lifetime.
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
-        Log.d ("Other Fragment2", "onStart");
+        Log.d("Other Fragment2", "onStart");
         // Apply any required UI change now that the Fragment is visible.
     }
 
     // Called at the start of the active lifetime.
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        Log.d ("Other Fragment", "onResume");
+        Log.d("Other Fragment", "onResume");
         // Resume any paused UI updates, threads, or processes required
         // by the Fragment but suspended when it became inactive.
     }
 
     // Called at the end of the active lifetime.
     @Override
-    public void onPause(){
-        Log.d ("Other Fragment", "onPause");
+    public void onPause() {
+        Log.d("Other Fragment", "onPause");
         // Suspend UI updates, threads, or CPU intensive processes
         // that don't need to be updated when the Activity isn't
         // the active foreground activity.
@@ -224,7 +246,7 @@ public class TasksListFrag extends Fragment {
     // end of the active lifecycle.
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        Log.d ("Other Fragment", "onSaveInstanceState");
+        Log.d("Other Fragment", "onSaveInstanceState");
         // Save UI state changes to the savedInstanceState.
         // This bundle will be passed to onCreate, onCreateView, and
         // onCreateView if the parent Activity is killed and restarted.
@@ -233,8 +255,8 @@ public class TasksListFrag extends Fragment {
 
     // Called at the end of the visible lifetime.
     @Override
-    public void onStop(){
-        Log.d ("Other Fragment", "onStop");
+    public void onStop() {
+        Log.d("Other Fragment", "onStop");
         // Suspend remaining UI updates, threads, or processing
         // that aren't required when the Fragment isn't visible.
         super.onStop();
@@ -243,15 +265,15 @@ public class TasksListFrag extends Fragment {
     // Called when the Fragment's View has been detached.
     @Override
     public void onDestroyView() {
-        Log.d ("Other Fragment", "onDestroyView");
+        Log.d("Other Fragment", "onDestroyView");
         // Clean up resources related to the View.
         super.onDestroyView();
     }
 
     // Called at the end of the full lifetime.
     @Override
-    public void onDestroy(){
-        Log.d ("Other Fragment", "onDestroy");
+    public void onDestroy() {
+        Log.d("Other Fragment", "onDestroy");
         // Clean up any resources including ending threads,
         // closing database connections etc.
         super.onDestroy();
@@ -260,7 +282,7 @@ public class TasksListFrag extends Fragment {
     // Called when the Fragment has been detached from its parent Activity.
     @Override
     public void onDetach() {
-        Log.d ("Other Fragment", "onDetach");
+        Log.d("Other Fragment", "onDetach");
         super.onDetach();
     }
 }
