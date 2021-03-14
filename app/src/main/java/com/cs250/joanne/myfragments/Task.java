@@ -1,21 +1,32 @@
 package com.cs250.joanne.myfragments;
 
+import android.util.Log;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
-public class Task {
+public class Task implements Comparable<Task> {
     private String name;
     private final int id;
     private static int curId = 0;
     private String dueDate;
     private String completedDate;
     private String category;
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
     public Task(String title, String dueDate, String category) {
         this.id = curId++;
         this.name = title;
         this.dueDate = dueDate;
-        this.category = category;
+        if (category.equals("")) {
+            this.category = "misc";
+        } else {
+            this.category = category;
+        }
     }
 
     public int getId() {
@@ -39,7 +50,7 @@ public class Task {
     }
 
     public String getDueDate() {
-        return dueDate;
+        return this.dueDate;
     }
 
     public void setDueDate(String dueDate) {
@@ -60,5 +71,40 @@ public class Task {
 
     public void setCompletedDate(String completedDate) {
         this.completedDate = completedDate;
+    }
+
+    public Date getDueDateFormatted() {
+        if (this.dueDate == null) return null;
+        try {
+            return formatter.parse(this.dueDate);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public Date getCompletedDateFormatted() {
+        if (this.completedDate == null) return null;
+        try {
+            return formatter.parse(this.dueDate);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public int compareTo(Task other) {
+        Date thisDueDate = this.getDueDateFormatted();
+        Date otherDueDate = other.getDueDateFormatted();
+        Log.d("debugging", thisDueDate.toString());
+        Log.d("debugging", otherDueDate.toString());
+
+
+        return thisDueDate.compareTo(otherDueDate);
+    }
+
+    @Override
+    public String toString() {
+        return "{name=" + this.name + ", dueDate=" + this.dueDate
+                + ", completedDate=" + this.completedDate + ", category=" + this.category + "}";
     }
 }

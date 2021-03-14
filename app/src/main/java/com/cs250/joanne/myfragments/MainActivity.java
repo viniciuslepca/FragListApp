@@ -17,11 +17,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity
             tasks = new ArrayList<>();
         } else {
             tasks = gson.fromJson(json, type);
+            // Can be called since Task implements Comparable<Task>
+            Collections.sort(tasks);
             for (Task t : tasks) {
                 if (t.getCompletedDate() == null) {
                     todo.add(t);

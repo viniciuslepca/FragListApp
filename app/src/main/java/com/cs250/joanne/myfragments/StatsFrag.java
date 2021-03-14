@@ -85,31 +85,25 @@ public class StatsFrag extends Fragment {
         int pastDue = 0;
         int toBeDone = 0;
         int totalTasks = 0;
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
         for (Task t : tasks) {
             totalTasks++;
-            String dueDateStr = t.getDueDate();
-            try {
-                Date dueDate = dateFormatter.parse(dueDateStr);
-                String completedDateStr = t.getCompletedDate();
-                if (completedDateStr == null) {
-                    Date today = new Date();
-                    if (today.after(dueDate)) {
-                        pastDue++;
-                    } else {
-                        toBeDone++;
-                    }
+            Date dueDate = t.getDueDateFormatted();
+            Date completedDate = t.getCompletedDateFormatted();
+            if (completedDate == null) {
+                Date today = new Date();
+                if (today.after(dueDate)) {
+                    pastDue++;
                 } else {
-                    Date completedDate = dateFormatter.parse(completedDateStr);
-                    if (completedDate.after(dueDate)) {
-                        doneAfterDue++;
-                    } else {
-                        doneByDeadline++;
-                    }
+                    toBeDone++;
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+            } else {
+                if (completedDate.after(dueDate)) {
+                    doneAfterDue++;
+                } else {
+                    doneByDeadline++;
+                }
             }
+
         }
 
         // Populate statistics
