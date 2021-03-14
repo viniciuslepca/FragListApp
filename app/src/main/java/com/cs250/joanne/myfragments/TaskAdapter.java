@@ -24,6 +24,10 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         this.type = type;
     }
 
+    public String getType() {
+        return this.type;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout itemView;
