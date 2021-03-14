@@ -50,6 +50,8 @@ public class ViewCompletedTaskFrag extends DialogFragment {
         dueDateTextView.setText(dueDate);
         TextView categoryTextView = view.findViewById(R.id.pop_up_category_done);
         categoryTextView.setText(category);
+        TextView doneDateTextView = view.findViewById(R.id.pop_up_done_date);
+        doneDateTextView.setText(doneDate);
 
         return builder.create();
     }

@@ -2,13 +2,18 @@ package com.cs250.joanne.myfragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
+
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,7 +28,7 @@ public class MarkListCompletedFrag extends DialogFragment {
 
         myact = (MainActivity) getActivity();
 
-        String dueDate = getArguments().getString("dueDate");
+        final String dueDate = getArguments().getString("dueDate");
         String category = getArguments().getString("category");
         String name = getArguments().getString("name");
         final int POSITION = getArguments().getInt("position");
@@ -46,7 +51,18 @@ public class MarkListCompletedFrag extends DialogFragment {
                         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
                         Date date = new Date();
                         String completedDate = formatter.format(date).toString();
-                        TASKS.get(POSITION).setCompletedDate(completedDate);
+                        Task task = TASKS.get(POSITION);
+                        task.setCompletedDate(completedDate);
+                        TASKS.remove(POSITION);
+                        TASKS.add(task);
+                        Context context = myact.getApplicationContext();
+                        SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                        ArrayList<Task> updatedTasks = myact.tasks;
+                        SharedPreferences.Editor peditor = myPrefs.edit();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(updatedTasks);
+                        peditor.putString("tasks", json);
+                        peditor.apply();
                     }
                 })
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
