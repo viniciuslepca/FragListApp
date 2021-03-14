@@ -32,7 +32,7 @@ public class MarkListCompletedFrag extends DialogFragment {
         String category = getArguments().getString("category");
         String name = getArguments().getString("name");
         final int POSITION = getArguments().getInt("position");
-        final ArrayList<Task> TASKS = myact.tasks;
+        final ArrayList<Task> TASKS = myact.todo;
 
         // Use the Builder class for convenient dialog constructor
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -50,7 +50,7 @@ public class MarkListCompletedFrag extends DialogFragment {
                         // Implement Mark Completed button
                         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
                         Date date = new Date();
-                        String completedDate = formatter.format(date).toString();
+                        String completedDate = formatter.format(date);
                         Task task = TASKS.get(POSITION);
                         task.setCompletedDate(completedDate);
                         TASKS.remove(POSITION);
