@@ -15,8 +15,7 @@
     <string name="add_task_due">Due</string>
     <string name="add_task_category">Category</string>
     <string name="choose_date_hint">Choose due date</string>
-    <string name="save_button_text">SAVE</string>
-    <string name="discard_button_text">CANCEL</string>
+    <string name="save_button_text">Save</string>
     <string name="category_hint">Enter the category</string>
     <string name="add_task">Add a Task</string>
     <string name="task_update">Task Update</string>
@@ -30,4 +29,10 @@
     <string name="mark_completed_button">MARK COMPLETED</string>
     <string name="what_was_done">What was done</string>
     <string name="pop_up_done_date">DONE:</string>
+    <string name="done_by_deadline">done by deadline</string>
+    <string name="num_placeholder">0</string>
+    <string name="done_after_due">done after due</string>
+    <string name="past_due">past due</string>
+    <string name="to_be_done">to be done</string>
+    <string name="total_tasks">Total Tasks</string>
 </resources>
