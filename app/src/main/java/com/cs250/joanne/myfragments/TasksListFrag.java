@@ -94,7 +94,7 @@ public class TasksListFrag extends Fragment {
                     String category = myact.tasks.get(index).getCategory();
                     String name = myact.tasks.get(index).getName();
 
-                    bundle.putString("name", name);com
+                    bundle.putString("name", name);
                     bundle.putString("dueDate", dueDate);
                     bundle.putString("doneDate", doneDate);
                     bundle.putString("category", category);
